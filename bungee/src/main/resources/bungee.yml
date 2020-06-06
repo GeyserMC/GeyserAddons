@@ -1,0 +1,6 @@
+main: org.geysermc.addons.bungee.BungeeGeyserAddonBootstrap
+name: ${name}
+version: ${version}
+website: https://geysermc.org
+author: GeyserMC
+description: ${description}

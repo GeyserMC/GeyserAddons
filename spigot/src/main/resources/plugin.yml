@@ -1,0 +1,7 @@
+main: org.geysermc.addons.spigot.SpigotGeyserAddonBootstrap
+name: ${name}
+version: ${version}
+website: https://geysermc.org
+author: GeyserMC
+description: ${description}
+api-version: 1.13
