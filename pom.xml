@@ -25,9 +25,9 @@
     </organization>
 
     <scm>
-        <connection>scm:git:https://github.com/GeyserMC/Geyser.git</connection>
-        <developerConnection>scm:git:git@github.com:GeyserMC/Geyser.git</developerConnection>
-        <url>https://github.com/GeyserMC/Geyser</url>
+        <connection>scm:git:https://github.com/GeyserMC/GeyserAddons.git</connection>
+        <developerConnection>scm:git:git@github.com:GeyserMC/GeyserAddons.git</developerConnection>
+        <url>https://github.com/GeyserMC/GeyserAddons</url>
     </scm>
 
     <modules>
