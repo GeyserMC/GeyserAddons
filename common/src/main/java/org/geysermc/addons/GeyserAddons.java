@@ -50,7 +50,9 @@ public class GeyserAddons {
      */
     public void onEnable() {
         for (AddonModule module : modules) {
-            module.onEnable();
+            if (module.getConfiguration().isEnabled()) {
+                module.onEnable();
+            }
         }
     }
 
@@ -59,7 +61,9 @@ public class GeyserAddons {
      */
     public void onDisable() {
         for (AddonModule module : modules) {
-            module.onDisable();
+            if (module.getConfiguration().isEnabled()) {
+                module.onDisable();
+            }
         }
     }
 

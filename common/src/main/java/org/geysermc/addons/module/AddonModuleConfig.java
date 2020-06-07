@@ -1,5 +1,6 @@
 package org.geysermc.addons.module;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import lombok.Getter;
@@ -11,6 +12,8 @@ import java.util.logging.Logger;
 
 @Getter
 public class AddonModuleConfig {
+    @JsonProperty(value = "enabled")
+    private boolean enabled;
 
     public static AddonModuleConfig load(Logger logger, Path configPath) {
         return load(logger, configPath, AddonModuleConfig.class);

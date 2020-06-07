@@ -11,9 +11,9 @@ public class PlaceholderModule extends AddonModule {
     private PlaceholderModuleConfig configuration;
 
     public PlaceholderModule(SpigotGeyserAddonBootstrap bootstrap) {
-        super(bootstrap, "placeholders", "Adds PlaceholderAPI support for Floodgate");
+        super(bootstrap, "placeholders", "Adds PlaceholderAPI support for Floodgate", PlaceholderModuleConfig.class);
 
-        configuration = loadConfig(PlaceholderModuleConfig.class);
+        this.configuration = getConfigurationAs(PlaceholderModuleConfig.class);
     }
 
     public void onEnable() {

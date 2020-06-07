@@ -1,3 +1,6 @@
+# Should this module be enabled
+enabled: true
+
 # Enables the use of specific device descriptors for PlaceholderAPI
 specific-device-descriptors: true
 
