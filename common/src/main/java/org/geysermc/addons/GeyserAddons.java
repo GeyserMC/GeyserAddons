@@ -36,7 +36,6 @@ import java.util.List;
  * Core class for the Geyser addons plugin. For the main
  * classes of other platforms, look in their modules.
  */
-@RequiredArgsConstructor
 public class GeyserAddons {
 
     private static GeyserAddons INSTANCE;
@@ -44,6 +43,22 @@ public class GeyserAddons {
     private final GeyserAddonBootstrap bootstrap;
 
     private List<AddonModule> modules = new ArrayList<>();
+
+    public GeyserAddons(GeyserAddonBootstrap bootstrap) {
+        this.bootstrap = bootstrap;
+
+        AddonCommand.AddonCommandBuilder reloadCommand = AddonCommand.builder();
+        reloadCommand.command("reload");
+        reloadCommand.description("Reloads all modules");
+        reloadCommand.permission("geyseraddons.command.reload");
+        reloadCommand.aliases(new ArrayList<>());
+        reloadCommand.executor((source, args) -> {
+            this.onDisable();
+            this.onEnable();
+        });
+
+        registerCommand(reloadCommand.build());
+    }
 
     /**
      * Code that is ran when this plugin is enabled.
