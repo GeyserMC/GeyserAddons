@@ -5,3 +5,4 @@ website: https://geysermc.org
 author: GeyserMC
 description: ${description}
 api-version: 1.13
+softdepend: [floodgate-bukkit, PlaceholderAPI]

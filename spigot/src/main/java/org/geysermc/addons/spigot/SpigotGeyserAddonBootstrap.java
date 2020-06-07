@@ -25,12 +25,14 @@
 
 package org.geysermc.addons.spigot;
 
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.geysermc.addons.GeyserAddonBootstrap;
+import org.geysermc.addons.GeyserAddonConfig;
 import org.geysermc.addons.GeyserAddons;
 import org.geysermc.addons.spigot.command.SpigotCommandSource;
 import org.geysermc.addons.command.AddonCommand;
@@ -40,6 +42,9 @@ import java.lang.reflect.Field;
 public class SpigotGeyserAddonBootstrap extends JavaPlugin implements GeyserAddonBootstrap {
 
     private static CommandMap COMMAND_MAP;
+
+    @Getter
+    private SpigotGeyserAddonConfig configuration;
 
     static {
         try {
@@ -54,11 +59,17 @@ public class SpigotGeyserAddonBootstrap extends JavaPlugin implements GeyserAddo
 
     @Override
     public void onLoad() {
+        configuration = GeyserAddonConfig.load(getLogger(), getDataFolder().toPath().resolve("config.yml"), SpigotGeyserAddonConfig.class);
+
         GeyserAddons.setInstance(new GeyserAddons(this));
     }
 
     @Override
     public void onEnable() {
+        if (Bukkit.getPluginManager().getPlugin("floodgate-bukkit") != null && Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new Placeholders(this).register();
+        }
+
         GeyserAddons.getInstance().onEnable();
     }
 
