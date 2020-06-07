@@ -49,18 +49,22 @@ public class GeyserAddons {
      * Code that is ran when this plugin is enabled.
      */
     public void onEnable() {
-
+        for (AddonModule module : modules) {
+            module.onEnable();
+        }
     }
 
     /**
      * Code that is ran when this plugin is disabled.
      */
     public void onDisable() {
-
+        for (AddonModule module : modules) {
+            module.onDisable();
+        }
     }
 
     /**
-     * Registers a module.
+     * Registers a {@link AddonModule}.
      *
      * @param module the module to register
      */

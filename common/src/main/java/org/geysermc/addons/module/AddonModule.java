@@ -26,15 +26,27 @@
 package org.geysermc.addons.module;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.geysermc.addons.GeyserAddonBootstrap;
 
 /**
  * Represents an addon module. Each "addon" for Geyser Addons is
  * stored in a separate module each with their own loading, config,
  * and command classes.
  */
+@Getter
 @AllArgsConstructor
 public class AddonModule {
 
+    private GeyserAddonBootstrap bootstrap;
     private String moduleName;
     private String description;
+
+    public void onEnable() { }
+
+    public void onDisable() { }
+
+    public <T extends AddonModuleConfig> T loadConfig(Class<T> configClass) {
+        return AddonModuleConfig.load(bootstrap.getAddonLogger(), bootstrap.getConfigFolder().resolve("modules").resolve(moduleName + ".yml"), configClass);
+    }
 }

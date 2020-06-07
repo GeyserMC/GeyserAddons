@@ -36,15 +36,20 @@ import org.geysermc.addons.GeyserAddonConfig;
 import org.geysermc.addons.GeyserAddons;
 import org.geysermc.addons.spigot.command.SpigotCommandSource;
 import org.geysermc.addons.command.AddonCommand;
+import org.geysermc.addons.spigot.modules.placeholders.PlaceholderModule;
+import org.geysermc.addons.spigot.modules.placeholders.PlaceholderModuleConfig;
+import org.geysermc.floodgate.BukkitPlugin;
 
 import java.lang.reflect.Field;
+import java.nio.file.Path;
+import java.util.logging.Logger;
 
 public class SpigotGeyserAddonBootstrap extends JavaPlugin implements GeyserAddonBootstrap {
 
     private static CommandMap COMMAND_MAP;
 
     @Getter
-    private SpigotGeyserAddonConfig configuration;
+    private PlaceholderModuleConfig configuration;
 
     static {
         try {
@@ -59,17 +64,12 @@ public class SpigotGeyserAddonBootstrap extends JavaPlugin implements GeyserAddo
 
     @Override
     public void onLoad() {
-        configuration = GeyserAddonConfig.load(getLogger(), getDataFolder().toPath().resolve("config.yml"), SpigotGeyserAddonConfig.class);
-
         GeyserAddons.setInstance(new GeyserAddons(this));
+        GeyserAddons.getInstance().registerModule(new PlaceholderModule(this));
     }
 
     @Override
     public void onEnable() {
-        if (Bukkit.getPluginManager().getPlugin("floodgate-bukkit") != null && Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            new Placeholders(this).register();
-        }
-
         GeyserAddons.getInstance().onEnable();
     }
 
@@ -93,5 +93,15 @@ public class SpigotGeyserAddonBootstrap extends JavaPlugin implements GeyserAddo
         command.setPermission(addonCommand.getPermission());
         command.setAliases(addonCommand.getAliases());
         COMMAND_MAP.register(addonCommand.getCommand(), "geyseraddons", command);
+    }
+
+    @Override
+    public Path getConfigFolder() {
+        return this.getDataFolder().toPath();
+    }
+
+    @Override
+    public Logger getAddonLogger() {
+        return getLogger();
     }
 }

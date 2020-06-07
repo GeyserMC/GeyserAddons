@@ -1,15 +1,18 @@
-package org.geysermc.addons.spigot;
+package org.geysermc.addons.spigot.modules.placeholders;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
+import org.geysermc.addons.spigot.SpigotGeyserAddonBootstrap;
 import org.geysermc.floodgate.FloodgateAPI;
 import org.geysermc.floodgate.FloodgatePlayer;
 
 public class Placeholders extends PlaceholderExpansion {
 
     private SpigotGeyserAddonBootstrap plugin;
+    private PlaceholderModule module;
 
-    public Placeholders(SpigotGeyserAddonBootstrap plugin){
+    public Placeholders(PlaceholderModule module, SpigotGeyserAddonBootstrap plugin){
+        this.module = module;
         this.plugin = plugin;
     }
 
@@ -30,7 +33,7 @@ public class Placeholders extends PlaceholderExpansion {
 
     @Override
     public String getIdentifier(){
-        return "floodgate";
+        return "Floodgate";
     }
 
     @Override
@@ -53,33 +56,33 @@ public class Placeholders extends PlaceholderExpansion {
                 if (FloodgateAPI.isBedrockPlayer(player.getUniqueId())) {
                     FloodgatePlayer floodgatePlayer = FloodgateAPI.getPlayer(player.getUniqueId());
                     boolean upper = identifier.endsWith("_upper");
-                    return plugin.getConfiguration().getPlaceholders().getLocale().getFound().replace("%locale%", upper ? floodgatePlayer.getLanguageCode().toUpperCase() : floodgatePlayer.getLanguageCode().toLowerCase());
+                    return module.getConfiguration().getLocale().getFound().replace("%locale%", upper ? floodgatePlayer.getLanguageCode().toUpperCase() : floodgatePlayer.getLanguageCode().toLowerCase());
                 } else {
-                    return plugin.getConfiguration().getPlaceholders().getLocale().getNone();
+                    return module.getConfiguration().getLocale().getNone();
                 }
 
             case "version":
                 if (FloodgateAPI.isBedrockPlayer(player.getUniqueId())) {
                     FloodgatePlayer floodgatePlayer = FloodgateAPI.getPlayer(player.getUniqueId());
-                    return plugin.getConfiguration().getPlaceholders().getVersion().getFound().replace("%version%", floodgatePlayer.getVersion());
+                    return module.getConfiguration().getVersion().getFound().replace("%version%", floodgatePlayer.getVersion());
                 } else {
-                    return plugin.getConfiguration().getPlaceholders().getVersion().getNone();
+                    return module.getConfiguration().getVersion().getNone();
                 }
 
             case "username":
                 if (FloodgateAPI.isBedrockPlayer(player.getUniqueId())) {
                     FloodgatePlayer floodgatePlayer = FloodgateAPI.getPlayer(player.getUniqueId());
-                    return plugin.getConfiguration().getPlaceholders().getXboxUsername().getFound().replace("%username%", floodgatePlayer.getUsername());
+                    return module.getConfiguration().getXboxUsername().getFound().replace("%username%", floodgatePlayer.getUsername());
                 } else {
-                    return plugin.getConfiguration().getPlaceholders().getXboxUsername().getNone();
+                    return module.getConfiguration().getXboxUsername().getNone();
                 }
 
             case "xuid":
                 if (FloodgateAPI.isBedrockPlayer(player.getUniqueId())) {
                     FloodgatePlayer floodgatePlayer = FloodgateAPI.getPlayer(player.getUniqueId());
-                    return plugin.getConfiguration().getPlaceholders().getXboxXuid().getFound().replace("%xuid%", floodgatePlayer.getXuid());
+                    return module.getConfiguration().getXboxXuid().getFound().replace("%xuid%", floodgatePlayer.getXuid());
                 } else {
-                    return plugin.getConfiguration().getPlaceholders().getXboxXuid().getNone();
+                    return module.getConfiguration().getXboxXuid().getNone();
                 }
         }
 
@@ -94,43 +97,43 @@ public class Placeholders extends PlaceholderExpansion {
      */
     private String getPlayerDeviceString(Player player) {
         if (FloodgateAPI.isBedrockPlayer(player.getUniqueId())) {
-            if (plugin.getConfiguration().getPlaceholders().isSpecificDeviceDescriptors()) {
+            if (module.getConfiguration().isSpecificDeviceDescriptors()) {
                 FloodgatePlayer floodgatePlayer = FloodgateAPI.getPlayer(player.getUniqueId());
                 switch (floodgatePlayer.getDeviceOS()) {
                     case ANDROID:
-                        return plugin.getConfiguration().getPlaceholders().getDevice().getAndroid().replace("&", "§");
+                        return module.getConfiguration().getDevice().getAndroid().replace("&", "§");
                     case IOS:
-                        return plugin.getConfiguration().getPlaceholders().getDevice().getIOS().replace("&", "§");
+                        return module.getConfiguration().getDevice().getIOS().replace("&", "§");
                     case OSX:
-                        return plugin.getConfiguration().getPlaceholders().getDevice().getOSX().replace("&", "§");
+                        return module.getConfiguration().getDevice().getOSX().replace("&", "§");
                     case FIREOS:
-                        return plugin.getConfiguration().getPlaceholders().getDevice().getFireos().replace("&", "§");
+                        return module.getConfiguration().getDevice().getFireos().replace("&", "§");
                     case GEARVR:
-                        return plugin.getConfiguration().getPlaceholders().getDevice().getGearVR().replace("&", "§");
+                        return module.getConfiguration().getDevice().getGearVR().replace("&", "§");
                     case HOLOLENS:
-                        return plugin.getConfiguration().getPlaceholders().getDevice().getHololens().replace("&", "§");
+                        return module.getConfiguration().getDevice().getHololens().replace("&", "§");
                     case WIN10:
-                        return plugin.getConfiguration().getPlaceholders().getDevice().getWin10().replace("&", "§");
+                        return module.getConfiguration().getDevice().getWin10().replace("&", "§");
                     case WIN32:
-                        return plugin.getConfiguration().getPlaceholders().getDevice().getWin32().replace("&", "§");
+                        return module.getConfiguration().getDevice().getWin32().replace("&", "§");
                     case DEDICATED:
-                        return plugin.getConfiguration().getPlaceholders().getDevice().getDedicated().replace("&", "§");
+                        return module.getConfiguration().getDevice().getDedicated().replace("&", "§");
                     case ORBIS:
-                        return plugin.getConfiguration().getPlaceholders().getDevice().getOrbis().replace("&", "§");
+                        return module.getConfiguration().getDevice().getOrbis().replace("&", "§");
                     case NX:
-                        return plugin.getConfiguration().getPlaceholders().getDevice().getNX().replace("&", "§");
+                        return module.getConfiguration().getDevice().getNX().replace("&", "§");
                     case SWITCH:
-                        return plugin.getConfiguration().getPlaceholders().getDevice().getNintendoSwitch().replace("&", "§");
+                        return module.getConfiguration().getDevice().getNintendoSwitch().replace("&", "§");
                     case XBOX_ONE:
-                        return plugin.getConfiguration().getPlaceholders().getDevice().getXboxOne().replace("&", "§");
+                        return module.getConfiguration().getDevice().getXboxOne().replace("&", "§");
                     default:
-                        return plugin.getConfiguration().getPlaceholders().getDevice().getUnknown().replace("&", "§");
+                        return module.getConfiguration().getDevice().getUnknown().replace("&", "§");
                 }
             }else{
-                return plugin.getConfiguration().getPlaceholders().getDevice().getGeneric().replace("&", "§");
+                return module.getConfiguration().getDevice().getGeneric().replace("&", "§");
             }
         } else {
-            return plugin.getConfiguration().getPlaceholders().getDevice().getJava().replace("&", "§");
+            return module.getConfiguration().getDevice().getJava().replace("&", "§");
         }
     }
 
