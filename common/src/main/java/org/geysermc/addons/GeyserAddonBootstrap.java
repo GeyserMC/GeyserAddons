@@ -27,6 +27,9 @@ package org.geysermc.addons;
 
 import org.geysermc.addons.command.AddonCommand;
 
+import java.nio.file.Path;
+import java.util.logging.Logger;
+
 /**
  * Bootstrap class for Geyser addons.
  */
@@ -38,4 +41,8 @@ public interface GeyserAddonBootstrap {
      * @param command the command to register
      */
     void registerCommand(AddonCommand command);
+
+    Path getConfigFolder();
+
+    Logger getAddonLogger();
 }

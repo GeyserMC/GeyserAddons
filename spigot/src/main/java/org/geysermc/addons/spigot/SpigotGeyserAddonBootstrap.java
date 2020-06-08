@@ -25,21 +25,32 @@
 
 package org.geysermc.addons.spigot;
 
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.geysermc.addons.GeyserAddonBootstrap;
+import org.geysermc.addons.GeyserAddonConfig;
 import org.geysermc.addons.GeyserAddons;
 import org.geysermc.addons.spigot.command.SpigotCommandSource;
 import org.geysermc.addons.command.AddonCommand;
+import org.geysermc.addons.spigot.modules.placeholders.PlaceholderModule;
+import org.geysermc.addons.spigot.modules.placeholders.PlaceholderModuleConfig;
+import org.geysermc.floodgate.BukkitPlugin;
 
 import java.lang.reflect.Field;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.logging.Logger;
 
 public class SpigotGeyserAddonBootstrap extends JavaPlugin implements GeyserAddonBootstrap {
 
     private static CommandMap COMMAND_MAP;
+
+    @Getter
+    private PlaceholderModuleConfig configuration;
 
     static {
         try {
@@ -55,6 +66,7 @@ public class SpigotGeyserAddonBootstrap extends JavaPlugin implements GeyserAddo
     @Override
     public void onLoad() {
         GeyserAddons.setInstance(new GeyserAddons(this));
+        GeyserAddons.getInstance().registerModule(new PlaceholderModule(this));
     }
 
     @Override
@@ -82,5 +94,15 @@ public class SpigotGeyserAddonBootstrap extends JavaPlugin implements GeyserAddo
         command.setPermission(addonCommand.getPermission());
         command.setAliases(addonCommand.getAliases());
         COMMAND_MAP.register(addonCommand.getCommand(), "geyseraddons", command);
+    }
+
+    @Override
+    public Path getConfigFolder() {
+        return this.getDataFolder().toPath();
+    }
+
+    @Override
+    public Logger getAddonLogger() {
+        return getLogger();
     }
 }
