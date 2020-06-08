@@ -10,5 +10,5 @@ GeyserAddons is a series of addons modules for Geyser
 
 ## Links:
 - Geyser: https://geysermc.org
-- Docs: https://github.com/GeyserMC/Geyser/wiki
+- Docs: https://github.com/GeyserMC/Geyser/wiki/GeyserAddons
 - Download: http://ci.geysermc.org
