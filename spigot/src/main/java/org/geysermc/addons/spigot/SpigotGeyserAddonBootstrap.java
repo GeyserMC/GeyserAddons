@@ -42,6 +42,7 @@ import org.geysermc.floodgate.BukkitPlugin;
 
 import java.lang.reflect.Field;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class SpigotGeyserAddonBootstrap extends JavaPlugin implements GeyserAddonBootstrap {

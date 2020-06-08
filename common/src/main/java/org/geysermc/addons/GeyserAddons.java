@@ -25,12 +25,17 @@
 
 package org.geysermc.addons;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.geysermc.addons.command.AddonCommand;
 import org.geysermc.addons.module.AddonModule;
+import org.geysermc.common.ChatColor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 /**
  * Core class for the Geyser addons plugin. For the main
@@ -42,7 +47,10 @@ public class GeyserAddons {
 
     private final GeyserAddonBootstrap bootstrap;
 
-    private List<AddonModule> modules = new ArrayList<>();
+    private final List<AddonModule> modules = new ArrayList<>();
+
+    @Getter
+    private final List<AddonCommand> commands = new ArrayList<>();
 
     public GeyserAddons(GeyserAddonBootstrap bootstrap) {
         this.bootstrap = bootstrap;
@@ -53,11 +61,24 @@ public class GeyserAddons {
         reloadCommand.permission("geyseraddons.command.reload");
         reloadCommand.aliases(new ArrayList<>());
         reloadCommand.executor((source, args) -> {
+            source.sendMessage("Reloading GeyserAddons...");
             this.onDisable();
             this.onEnable();
+            source.sendMessage("Done");
+        });
+
+        AddonCommand.AddonCommandBuilder helpCommand = AddonCommand.builder();
+        helpCommand.command("help");
+        helpCommand.description("Shows the help dialog");
+        helpCommand.permission("geyseraddons.command.help");
+        helpCommand.aliases(new ArrayList<>());
+        helpCommand.executor((source, args) -> {
+            source.sendMessage("---- Showing Help For: GeyserAddons (Page 1/1) ----");
+            getCommands().forEach(cmd -> source.sendMessage(ChatColor.YELLOW + cmd.getCommand() + ChatColor.WHITE + ": " + cmd.getDescription()));
         });
 
         registerCommand(reloadCommand.build());
+        registerCommand(helpCommand.build());
     }
 
     /**
@@ -97,6 +118,8 @@ public class GeyserAddons {
      * @param command the command to register
      */
     public void registerCommand(AddonCommand command) {
+        this.bootstrap.getAddonLogger().log(Level.INFO, "Registering command '" + command.getCommand() + "'");
+        commands.add(command);
         this.bootstrap.registerCommand(command);
     }
 

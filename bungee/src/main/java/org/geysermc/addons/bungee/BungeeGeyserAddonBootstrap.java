@@ -33,6 +33,9 @@ import org.geysermc.addons.GeyserAddons;
 import org.geysermc.addons.bungee.command.BungeeCommandSource;
 import org.geysermc.addons.command.AddonCommand;
 
+import java.nio.file.Path;
+import java.util.logging.Logger;
+
 public class BungeeGeyserAddonBootstrap extends Plugin implements GeyserAddonBootstrap {
 
     @Override
@@ -60,5 +63,15 @@ public class BungeeGeyserAddonBootstrap extends Plugin implements GeyserAddonBoo
             }
         };
         this.getProxy().getPluginManager().registerCommand(this, command);
+    }
+
+    @Override
+    public Path getConfigFolder() {
+        return this.getDataFolder().toPath();
+    }
+
+    @Override
+    public Logger getAddonLogger() {
+        return getLogger();
     }
 }
