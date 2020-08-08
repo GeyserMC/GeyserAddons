@@ -31,6 +31,7 @@ import net.md_5.bungee.api.plugin.Plugin;
 import org.geysermc.addons.GeyserAddonBootstrap;
 import org.geysermc.addons.GeyserAddons;
 import org.geysermc.addons.bungee.command.BungeeCommandSource;
+import org.geysermc.addons.bungee.message.BungeePluginMessageListener;
 import org.geysermc.addons.command.AddonCommand;
 
 public class BungeeGeyserAddonBootstrap extends Plugin implements GeyserAddonBootstrap {
@@ -43,6 +44,9 @@ public class BungeeGeyserAddonBootstrap extends Plugin implements GeyserAddonBoo
     @Override
     public void onEnable() {
         GeyserAddons.getInstance().onEnable();
+
+        this.getProxy().registerChannel(GeyserAddons.PLUGIN_MESSAGE_CHANNEL);
+        this.getProxy().getPluginManager().registerListener(this, new BungeePluginMessageListener(GeyserAddons.getInstance()));
     }
 
     @Override

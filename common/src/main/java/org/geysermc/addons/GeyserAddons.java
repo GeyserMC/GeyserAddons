@@ -25,31 +25,40 @@
 
 package org.geysermc.addons;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.geysermc.addons.command.AddonCommand;
+import org.geysermc.addons.message.PluginMessageListener;
 import org.geysermc.addons.module.AddonModule;
+import org.geysermc.addons.module.FormsModule;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Core class for the Geyser addons plugin. For the main
  * classes of other platforms, look in their modules.
  */
+@Getter
 @RequiredArgsConstructor
 public class GeyserAddons {
 
     private static GeyserAddons INSTANCE;
 
+    public static final String PLUGIN_MESSAGE_CHANNEL = "geyser:addons";
+
+    @Getter(AccessLevel.NONE)
     private final GeyserAddonBootstrap bootstrap;
 
-    private List<AddonModule> modules = new ArrayList<>();
+    private PluginMessageListener pluginMessageListener = new PluginMessageListener();
+    private Map<Class<? extends AddonModule>, AddonModule> modules = new HashMap<>();
 
     /**
      * Code that is ran when this plugin is enabled.
      */
     public void onEnable() {
-
+        this.registerModule(new FormsModule("form", "Module for managing forms with bedrock players. "));
     }
 
     /**
@@ -64,8 +73,22 @@ public class GeyserAddons {
      *
      * @param module the module to register
      */
-    public void registerModule(AddonModule module) {
-        this.modules.add(module);
+    public <T extends AddonModule> void registerModule(T module) {
+        this.registerModule(module.getClass(), module);
+    }
+
+    /**
+     * Registers a module.
+     *
+     * @param moduleClass the class of the module
+     * @param module the module to register
+     */
+    public <T extends AddonModule> void registerModule(Class<? extends T> moduleClass, T module) {
+        this.modules.put(moduleClass, module);
+    }
+
+    public <T extends AddonModule> T getModule(Class<? extends T> moduleClass) {
+        return moduleClass.cast(this.modules.get(moduleClass));
     }
 
     /**

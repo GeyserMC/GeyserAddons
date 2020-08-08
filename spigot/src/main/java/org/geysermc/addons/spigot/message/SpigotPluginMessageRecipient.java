@@ -23,20 +23,22 @@
  * @link https://github.com/GeyserMC/GeyserAddons
  */
 
-package org.geysermc.addons.module;
+package org.geysermc.addons.spigot.message;
 
+import io.netty.buffer.ByteBuf;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import org.geysermc.addons.message.PluginMessageRecipient;
+import org.geysermc.addons.spigot.SpigotGeyserAddonBootstrap;
 
-/**
- * Represents an addon module. Each "addon" for Geyser Addons is
- * stored in a separate module each with their own loading, config,
- * and command classes.
- */
-@Getter
-@AllArgsConstructor
-public class AddonModule {
+@AllArgsConstructor(staticName = "of")
+public class SpigotPluginMessageRecipient implements PluginMessageRecipient {
 
-    private String moduleName;
-    private String description;
+    private org.bukkit.plugin.messaging.PluginMessageRecipient handle;
+
+    @Override
+    public void sendPluginMessage(String channel, ByteBuf buf) {
+        byte[] payload = new byte[buf.writerIndex()];
+        buf.readBytes(payload);
+        this.handle.sendPluginMessage(SpigotGeyserAddonBootstrap.getPlugin(), channel, payload);
+    }
 }

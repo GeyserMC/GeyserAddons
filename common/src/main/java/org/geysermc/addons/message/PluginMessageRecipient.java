@@ -23,20 +23,20 @@
  * @link https://github.com/GeyserMC/GeyserAddons
  */
 
-package org.geysermc.addons.module;
+package org.geysermc.addons.message;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import io.netty.buffer.ByteBuf;
 
 /**
- * Represents an addon module. Each "addon" for Geyser Addons is
- * stored in a separate module each with their own loading, config,
- * and command classes.
+ * A recipient who is capable of receiving plugin messages.
  */
-@Getter
-@AllArgsConstructor
-public class AddonModule {
+public interface PluginMessageRecipient {
 
-    private String moduleName;
-    private String description;
+    /**
+     * Sends a plugin message to the outgoing channel.
+     *
+     * @param channel the channel to send the message over
+     * @param buffer the plugin message to send
+     */
+    void sendPluginMessage(String channel, ByteBuf buffer);
 }

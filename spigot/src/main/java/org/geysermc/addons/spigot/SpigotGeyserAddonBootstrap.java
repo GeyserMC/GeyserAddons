@@ -34,6 +34,7 @@ import org.geysermc.addons.GeyserAddonBootstrap;
 import org.geysermc.addons.GeyserAddons;
 import org.geysermc.addons.spigot.command.SpigotCommandSource;
 import org.geysermc.addons.command.AddonCommand;
+import org.geysermc.addons.spigot.message.SpigotPluginMessageListener;
 
 import java.lang.reflect.Field;
 
@@ -52,6 +53,8 @@ public class SpigotGeyserAddonBootstrap extends JavaPlugin implements GeyserAddo
         }
     }
 
+    private static SpigotGeyserAddonBootstrap instance;
+
     @Override
     public void onLoad() {
         GeyserAddons.setInstance(new GeyserAddons(this));
@@ -59,7 +62,11 @@ public class SpigotGeyserAddonBootstrap extends JavaPlugin implements GeyserAddo
 
     @Override
     public void onEnable() {
+        instance = this;
         GeyserAddons.getInstance().onEnable();
+
+        this.getServer().getMessenger().registerIncomingPluginChannel(this, GeyserAddons.PLUGIN_MESSAGE_CHANNEL, new SpigotPluginMessageListener(GeyserAddons.getInstance()));
+        this.getServer().getMessenger().registerOutgoingPluginChannel(this, GeyserAddons.PLUGIN_MESSAGE_CHANNEL);
     }
 
     @Override
@@ -82,5 +89,14 @@ public class SpigotGeyserAddonBootstrap extends JavaPlugin implements GeyserAddo
         command.setPermission(addonCommand.getPermission());
         command.setAliases(addonCommand.getAliases());
         COMMAND_MAP.register(addonCommand.getCommand(), "geyseraddons", command);
+    }
+
+    /**
+     * Gets the current instance of this bootstrap.
+     *
+     * @return the current instance of this bootstrap
+     */
+    public static SpigotGeyserAddonBootstrap getPlugin() {
+        return instance;
     }
 }

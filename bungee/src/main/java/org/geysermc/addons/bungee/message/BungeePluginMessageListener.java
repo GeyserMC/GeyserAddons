@@ -23,20 +23,34 @@
  * @link https://github.com/GeyserMC/GeyserAddons
  */
 
-package org.geysermc.addons.module;
+package org.geysermc.addons.bungee.message;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.event.PluginMessageEvent;
+import net.md_5.bungee.api.plugin.Listener;
+import net.md_5.bungee.event.EventHandler;
+import org.geysermc.addons.GeyserAddons;
+import org.geysermc.addons.bungee.BungeeAdapters;
 
-/**
- * Represents an addon module. Each "addon" for Geyser Addons is
- * stored in a separate module each with their own loading, config,
- * and command classes.
- */
-@Getter
 @AllArgsConstructor
-public class AddonModule {
+public class BungeePluginMessageListener implements Listener {
 
-    private String moduleName;
-    private String description;
+    private GeyserAddons plugin;
+
+    @EventHandler
+    public void onPluginMessage(PluginMessageEvent event) {
+        if (!(event.getReceiver() instanceof ProxiedPlayer)) {
+            return;
+        }
+        ByteBuf buf = ByteBufAllocator.DEFAULT.buffer(event.getData().length);
+        try {
+            buf.writeBytes(event.getData());
+            this.plugin.getPluginMessageListener().onMessageReceive(BungeeAdapters.of((ProxiedPlayer) event.getReceiver()), event.getTag(), buf);
+        } finally {
+            buf.release();
+        }
+    }
 }

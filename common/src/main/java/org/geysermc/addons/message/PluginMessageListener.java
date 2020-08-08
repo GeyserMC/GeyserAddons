@@ -23,20 +23,32 @@
  * @link https://github.com/GeyserMC/GeyserAddons
  */
 
-package org.geysermc.addons.module;
+package org.geysermc.addons.message;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import io.netty.buffer.ByteBuf;
+import org.geysermc.addons.GeyserAddons;
+import org.geysermc.addons.module.FormsModule;
+import org.geysermc.addons.util.NetworkUtils;
 
 /**
- * Represents an addon module. Each "addon" for Geyser Addons is
- * stored in a separate module each with their own loading, config,
- * and command classes.
+ * A listener for when receiving plugin messages.
  */
-@Getter
-@AllArgsConstructor
-public class AddonModule {
+public class PluginMessageListener {
 
-    private String moduleName;
-    private String description;
+    /**
+     * Called when a plugin message is received.
+     *
+     * @param recipient the recipient of the plugin message
+     * @param channel the channel the plugin message was received on
+     * @param buffer the plugin message received
+     */
+    public void onMessageReceive(PluginMessageRecipient recipient, String channel, ByteBuf buffer) {
+        if (!channel.equals(GeyserAddons.PLUGIN_MESSAGE_CHANNEL)) {
+            return;
+        }
+        String subChannel = NetworkUtils.readString(buffer);
+        if (subChannel.equals(FormsModule.get().getModuleName())) {
+            FormsModule.get().handleResponse(recipient, buffer.readInt(), NetworkUtils.readString(buffer));
+        }
+    }
 }
